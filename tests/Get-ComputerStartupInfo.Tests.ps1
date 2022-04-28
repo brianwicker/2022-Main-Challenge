@@ -1,9 +1,9 @@
 <#
 .DESCRIPTION
-Testing the main script
+Testing the Get-ComputerStartupInfo function
 #>
 
-Describe "Main Script" {
+Describe "Get-ComputerStartupInfo" {
     BeforeAll {
         $script:credential = Get-Secret -Name CimCredential -ErrorAction Ignore
     }
