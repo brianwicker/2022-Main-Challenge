@@ -38,16 +38,18 @@ Function Get-ComputerStartupInfo {
 
     [CmdletBinding(PositionalBinding = $false)]
     [OutputType([LastBoot])]
-    Param(
+    param(
         [Parameter(ValueFromPipeline, Position = 0, ParameterSetName = 'Name')]
         [alias("Name")]
         [alias("PSComputerName")]
         [string[]]$ComputerName = 'localhost',
+
         [Parameter()]
-        [pscredential]$Credential
+        [pscredential]
+        $Credential
     )
 
-    Begin {
+    begin {
         Write-Verbose "Begin $($MyInvocation.MyCommand)"
         [ScriptBlock]$GetEvents = {
             #Event 41 = The system has rebooted without cleanly shutting down first.
@@ -69,7 +71,7 @@ Function Get-ComputerStartupInfo {
         }
     }
 
-    Process {
+    process {
         foreach ($Computer in $ComputerName) {
             $Downtime = [timespan]::Zero
             Write-Verbose "Retrieving CIM data for $Computer"
@@ -133,7 +135,7 @@ Function Get-ComputerStartupInfo {
         }
     }
 
-    End {
+    end {
         Write-Verbose "End $($MyInvocation.MyCommand)"
     }
 }
