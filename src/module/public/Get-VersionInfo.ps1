@@ -1,13 +1,4 @@
-[cmdletbinding()]
-param(
-    [Parameter(
-        Mandatory
-    )]
-    [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
-    [String] $ConfigFilePath
-)
-
-function New-SSHSession {
+function Get-VersionInfo {
     [cmdletbinding()]
     param(
         # Input value description
@@ -25,7 +16,22 @@ function New-SSHSession {
             Mandatory,
             ValueFromPipelineByPropertyName
         )]
-        [String[]] $Computer
+        [String] $Computer,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Switch] $osVersion,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Switch] $SSHVersion,
+        [Parameter(
+            Mandatory,
+            ValueFromPipelineByPropertyName
+        )]
+        [Switch] $PSVersion
     )
 
     process {
@@ -51,5 +57,15 @@ $configObject.Hosts |
     } |
 
     ForEach-Object -Process {
-        Invoke-Command -Session $_ -ScriptBlock { ssh -V }
+        Invoke-Command -Session $_ -ScriptBlock {
+            if ($SSHVersion) {
+                ssh -V
+            }
+            if ($OSVersion) {
+                $PSVersionTable.OS
+            }
+            if ($PSVersion) {
+                $PSVersionTable.PSVersion.ToString()
+            }
+        }
     }
