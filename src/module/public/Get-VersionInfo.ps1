@@ -36,36 +36,26 @@ function Get-VersionInfo {
 
     process {
         try {
-            foreach ($computerName in $Computer) {
-                Write-Verbose "Connecting to $computerName"
+            Write-Verbose "Connecting to $computerName"
 
-                New-PSSession -HostName $computerName -KeyFilePath $KeyFilePath -UserName $Username -ErrorAction Stop
+            New-PSSession -HostName $computerName -KeyFilePath $KeyFilePath -UserName $Username -ErrorAction Stop
+            New-SSHSession -KeyFilePath $KeyFilePath -Username $Username -Computer $Computer |
 
-            }
+                ForEach-Object -Process {
+                    Invoke-Command -Session $_ -ScriptBlock {
+                        if ($SSHVersion) {
+                            ssh -V
+                        }
+                        if ($OSVersion) {
+                            $PSVersionTable.OS
+                        }
+                        if ($PSVersion) {
+                            $PSVersionTable.PSVersion.ToString()
+                        }
+                    }
+                }
         } catch {
             $PSCmdlet.ThrowTerminatingError($PSItem)
         }
     }
 }
-
-$configObject = Get-Content -Path $ConfigFilePath | ConvertFrom-Json
-
-$configObject.Hosts |
-
-    ForEach-Object -Process {
-        New-SSHSession -KeyFilePath $configObject.KeyFilePath -Username $configObject.Username -Computer $_
-    } |
-
-    ForEach-Object -Process {
-        Invoke-Command -Session $_ -ScriptBlock {
-            if ($SSHVersion) {
-                ssh -V
-            }
-            if ($OSVersion) {
-                $PSVersionTable.OS
-            }
-            if ($PSVersion) {
-                $PSVersionTable.PSVersion.ToString()
-            }
-        }
-    }
