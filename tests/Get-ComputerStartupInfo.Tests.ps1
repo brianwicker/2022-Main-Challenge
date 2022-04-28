@@ -27,4 +27,9 @@ Describe "Main Script" {
         $result = Get-ComputerStartupInfo -ComputerName localhost -Credential $script:credential
         $result | Should -Not -BeNullOrEmpty
     }
+
+    It "Returns a result of type LastBoot" {
+        $result = Get-ComputerStartupInfo -ComputerName localhost
+        $result.GetType().Name | Should -Be 'LastBoot'
+    }
 }
