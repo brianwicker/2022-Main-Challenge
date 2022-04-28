@@ -69,7 +69,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = 'Get-ComputerStartupInfo', 'Get-DiskSpaceInfo', 'Get-Version'
+    FunctionsToExport = 'Get-ComputerStartupInfo', 'Get-DiskSpaceInfo', 'Get-Version', 'Show-RunningProcess', 'Show-RunningProcess'
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport = @()
