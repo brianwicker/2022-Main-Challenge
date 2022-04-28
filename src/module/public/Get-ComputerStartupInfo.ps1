@@ -28,7 +28,7 @@ Function Get-ComputerStartupInfo {
     Parameters only
 
     .OUTPUTS
-    This command produces no output.
+    LastBoot
 
     .NOTES
     Author: Darwin Reiswig
@@ -36,9 +36,8 @@ Function Get-ComputerStartupInfo {
     Lovingly reused by Flawless Faction
     #>
 
-    [CmdletBinding(
-        PositionalBinding = $false
-    )]
+    [CmdletBinding(PositionalBinding = $false)]
+    [OutputType([LastBoot])]
     Param(
         [Parameter(ValueFromPipeline, Position = 0, ParameterSetName = 'Name')]
         [alias("Name")]
