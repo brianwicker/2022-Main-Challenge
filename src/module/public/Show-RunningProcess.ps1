@@ -1,3 +1,4 @@
+
 function Show-RunningProcess {
     <#
 .SYNOPSIS
@@ -27,7 +28,7 @@ Flawless FOR life!
             ValueFromPipelineByPropertyName
         )]
         [String[]]
-        $ComputerName,
+        $ComputerName = $ENV:ComputerName,
 
         [System.Management.Automation.PSCredential]
         $Credential
