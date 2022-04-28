@@ -3,10 +3,9 @@ function Set-FlawlessUser {
     .Synopsis
         Modifies a local user on a remote system
     .Description
-        Uses New-PSSession to create / modify a user on a remote system
-        SSH Is available as an option
+        Uses New-PSSession to create / modify a user on a remote system using SSH
     .PARAMETER user
-        user to create.  Password will be prompted
+        user to create.  Password will be prompted.
     .PARAMETER computerName
         ComputerName(s) to create the user on.
     .PARAMETER connectionUserName
@@ -14,7 +13,7 @@ function Set-FlawlessUser {
     .PARAMETER connectionKeyPath
         Path to the key file.
     .EXAMPLE
-        Set-FlawlessUser -user Chris -computerName Computer1 -connectionUserName adminUser -connectionKeyPath c:\temp\keyfile
+        Set-CompanyUser -user Chris -computerName Computer1 -connectionUserName adminUser -connectionKeyPath c:\temp\keyfile
     #>
     [cmdletbinding(DefaultParameterSetName = "default",
                     SupportsShouldProcess = $true)]
@@ -29,7 +28,7 @@ function Set-FlawlessUser {
         [String[]]$computerName,
 
         [Parameter(Mandatory = $true)]
-        [String]$connectionUserName,
+        [Switch]$connectionUserName,
 
         [Parameter(Mandatory = $true)]
         [ValidateScript({
