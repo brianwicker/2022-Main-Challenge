@@ -25,7 +25,7 @@ Function Get-ComputerStartupInfo {
     This example returns boot time information for the listed servers using the given credentials
 
     .INPUTS
-    Parameters only
+    ComputerName(s) and alternate credential
 
     .OUTPUTS
     LastBoot
@@ -33,7 +33,7 @@ Function Get-ComputerStartupInfo {
     .NOTES
     Author: Darwin Reiswig
 
-    Lovingly reused by Flawless Faction
+    Lovingly reused by joshooaj of Flawless Faction
     #>
 
     [CmdletBinding(PositionalBinding = $false)]
@@ -131,7 +131,7 @@ Function Get-ComputerStartupInfo {
                 ShutdownType     = $LastShutdownType
                 LastShutdownUser = $LastShutdownUser
             }
-            Write-Output $Result
+            $Result
         }
     }
 
