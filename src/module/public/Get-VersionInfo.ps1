@@ -1,28 +1,29 @@
 function Get-VersionInfo {
     <#
-.SYNOPSIS
-Show running process
+    .SYNOPSIS
+    Show running process
 
-.DESCRIPTION
-A unified command to return version information for installed versions of PowerShell, the operating system, and the ssh version.
-.PARAMETER Computer
+    .DESCRIPTION
+    A unified command to return version information for installed versions of PowerShell, the operating system, and the ssh version.
+    .PARAMETER Computer
 
-.PARAMETER Username
+    .PARAMETER Username
 
-.PARAMETER KeyFilePath
+    .PARAMETER KeyFilePath
 
-.PARAMETER SSHVersion
+    .PARAMETER SSHVersion
 
-.PARAMETER PSVersion
+    .PARAMETER PSVersion
 
-.PARAMETER OSVersion
+    .PARAMETER OSVersion
 
-.EXAMPLE
-Get-VersionInfo -SSHVersion -OSVersion -PSVersion
+    .EXAMPLE
+    Get-VersionInfo -SSHVersion -OSVersion -PSVersion
 
-.NOTES
-Flawless FOR life!
-#>
+    .NOTES
+    Flawless FOR life!
+    #>
+
     [cmdletbinding()]
     param(
         # Input value description
