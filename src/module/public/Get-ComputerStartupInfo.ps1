@@ -1,7 +1,7 @@
 Function Get-ComputerStartupInfo {
     <#
     .SYNOPSIS
-    RETRIEVE COMPUTER BOOT INFORMATION
+    Get information about the last startup, shutdown, and/or restart.
 
     .DESCRIPTION
     This script uses CIM and Get-WinEvent to retrieve time information for computer(s)
@@ -43,7 +43,7 @@ Function Get-ComputerStartupInfo {
         [Parameter(ValueFromPipeline, Position = 0, ParameterSetName = 'Name')]
         [alias("Name")]
         [alias("PSComputerName")]
-        [string[]]$ComputerName,
+        [string[]]$ComputerName = 'localhost',
         [Parameter()]
         [pscredential]$Credential
     )
@@ -58,17 +58,30 @@ Function Get-ComputerStartupInfo {
             #Event 1074 = Normal Restart
             Get-WinEvent -FilterHashtable @{Logname = 'System'; ID = 1074 } -MaxEvents 1 -ErrorAction SilentlyContinue
         }
+
+        [ScriptBlock]$ResolveSid = {
+            param($sid)
+            try {
+                $objSID = New-Object System.Security.Principal.SecurityIdentifier($sid)
+                $objSID.Translate([System.Security.Principal.NTAccount])
+            } catch {
+                Write-Warning "Unable to resolve SID to username"
+            }
+        }
     }
 
     Process {
         foreach ($Computer in $ComputerName) {
-            $Downtime = [timespan]0
+            $Downtime = [timespan]::Zero
             Write-Verbose "Retrieving CIM data for $Computer"
-            if ($Credential) {
-                $CIMData = Get-CimInstance -ClassName win32_operatingsystem -ComputerName $Computer -Credential $Credential
-            } else {
-                $CIMData = Get-CimInstance -ClassName win32_operatingsystem -ComputerName $Computer
+            $cimDataParams = @{
+                ClassName    = 'win32_operatingsystem'
+                ComputerName = $Computer
             }
+            if ($Credential) {
+                $cimDataParams.Credential = $Credential
+            }
+            $CIMData = Get-CimInstance @$cimDataParams
 
             Write-Verbose "Querying event log for $Computer for shutdown events."
             $params = @{
@@ -91,6 +104,9 @@ Function Get-ComputerStartupInfo {
                     1074 {
                         $LastShutdownType = "Normal"
                         $Downtime = $CIMData.LastBootUpTime - $LastShutdownTime
+                        if (-not [string]::IsNullOrWhitespace($CIMData.UserId)) {
+                            $LastShutdownUser = $ResolveSid.Invoke($CIMData.UserId)
+                        }
                     }
                     Default { $LastShutdownType = "Unknown" }
                 }
@@ -112,6 +128,7 @@ Function Get-ComputerStartupInfo {
                 UptimeDays       = ($CIMData.LocalDateTime - $CIMData.LastBootUpTime).ToString("dd\.hh\:mm\:ss")
                 InstallDate      = $CIMData.InstallDate
                 ShutdownType     = $LastShutdownType
+                LastShutdownUser = $LastShutdownUser
             }
             Write-Output $Result
         }
