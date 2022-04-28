@@ -25,7 +25,7 @@ function Set-FlawlessUser {
         [Switch]$connectionUserName,
 
         [Parameter(Mandatory = $true)]
-        [System.IO.FileInfo]$keyPath,
+        [System.IO.FileInfo]$keyPath
     )
     Begin{}
     process {
