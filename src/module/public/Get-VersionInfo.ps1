@@ -6,17 +6,19 @@ Show running process
 .DESCRIPTION
 A unified command to return version information for installed versions of PowerShell, the operating system, and the ssh version.
 .PARAMETER Computer
+
 .PARAMETER Username
+
 .PARAMETER KeyFilePath
+
 .PARAMETER SSHVersion
+
 .PARAMETER PSVersion
+
 .PARAMETER OSVersion
 
-.PARAMETER Credential
-Credential
-
 .EXAMPLE
-Show-RunningProcess -ComputerName computer1 -Credential (Get-Credential)
+Get-VersionInfo -SSHVersion -OSVersion -PSVersion
 
 .NOTES
 Flawless FOR life!
