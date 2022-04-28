@@ -81,7 +81,7 @@ Function Get-ComputerStartupInfo {
             if ($Credential) {
                 $cimDataParams.Credential = $Credential
             }
-            $CIMData = Get-CimInstance @$cimDataParams
+            $CIMData = Get-CimInstance @cimDataParams
 
             Write-Verbose "Querying event log for $Computer for shutdown events."
             $params = @{
